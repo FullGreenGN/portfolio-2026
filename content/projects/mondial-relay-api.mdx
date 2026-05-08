@@ -10,7 +10,7 @@ published: true
 
 # Mondial Relay API Wrapper
 
-The `mondial-relay` package is a high-level TypeScript library designed to simplify interactions with the Mondial Relay SOAP API. Logistics integrations are notoriously complex due to legacy protocols; this project abstracts those difficulties into a modern, type-safe developer experience. It allows businesses to easily integrate parcel tracking, point-of-delivery searching, and shipping label generation into their Node.js applications.
+The **mondial-relay** package is a high-level TypeScript library designed to simplify interactions with the Mondial Relay SOAP API. Logistics integrations are notoriously complex due to legacy protocols; this project abstracts those difficulties into a modern, type-safe developer experience. It allows businesses to easily integrate parcel tracking, point-of-delivery searching, and shipping label generation into their Node.js applications.
 
 ## Core Features
 
@@ -23,7 +23,7 @@ The `mondial-relay` package is a high-level TypeScript library designed to simpl
 
 The primary challenge of this project was **transforming legacy SOAP/XML communication** into a predictable, modern Promise-based API. SOAP services often return complex, deeply nested objects and use non-standard error handling within the XML body itself.
 
-To solve this, I implemented a robust mapping layer that handles the serialization and deserialization of XML using `soap` and `strong-soap`. The library automatically handles the MD5 security signatures required by Mondial Relay for every request, which involves concatenating specific parameters in a strict order. By centralizing this security logic, developers can focus on business logic rather than cryptographic formatting.
+To solve this, I implemented a robust mapping layer that handles the serialization and deserialization of XML using **soap** and **strong-soap**. The library automatically handles the MD5 security signatures required by Mondial Relay for every request, which involves concatenating specific parameters in a strict order. By centralizing this security logic, developers can focus on business logic rather than cryptographic formatting.
 
 ## Implementation
 
@@ -52,3 +52,4 @@ async function findNearbyPoints(zipCode: string) {
     console.error('Failed to fetch points:', error);
   }
 }
+```
