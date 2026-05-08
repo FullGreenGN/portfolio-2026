@@ -1,13 +1,67 @@
 ---
-title: "PolarisDev Platform"
-description: "The core engine powering development workflows."
-date: "2024-05-01"
-image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?w=800&q=80"
-tags: ["Next.js", "TypeScript"]
-github: "https://github.com/your-username"
+title: ShotEat Live
+description: Real-time streaming and food interaction platform.
+date: 2024-05-08
+image: https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80
+tags: ["React", "WebRTC", "Node.js", "Tailwind CSS", "Socket.io"]
+github: https://github.com/shoteat
 published: true
 ---
 
-# Hello Polaris
+# ShotEat Live
 
-This project is built using **Next.js 14**. I used Redis to track how many people visit this specific documentation page.
+ShotEat Live is a specialized real-time streaming platform designed to bridge the gap between culinary professionals and food enthusiasts. By merging high-fidelity video broadcasting with interactive food commerce, ShotEat transforms the passive experience of watching a cooking show into an active, social, and transactional environment. Whether it's a professional chef hosting a masterclass or a festival vendor showcasing live preparation, ShotEat provides the digital infrastructure for authentic food interactions.
+
+## Core Features
+
+- **Live Stream Interaction**: High-definition, low-latency video streaming allows viewers to interact with chefs in real-time, asking questions and receiving immediate feedback.
+- **Instant Recipe Sharing**: Chefs can push interactive recipe cards directly to the viewers' screens, allowing for immediate saving or printing of ingredients and steps.
+- **Real-time Chat & Reactions**: A custom-built messaging layer supports thousands of concurrent users, featuring culinary-themed reactions and priority messaging for "Gars Chauds" (super-interested) users.
+- **Vendor Integration**: Seamless transitions between viewing a live stream and placing a real-time order from a festival stand or restaurant.
+
+## Technical Challenge: Solving for Low-Latency Video
+
+The primary technical hurdle was implementing a video delivery system that maintained sub-second latency. Standard HLS (HTTP Live Streaming) protocols often introduce delays of 10 to 30 seconds, which destroys the "real-time" nature of a Q&A session or a live auction.
+
+To solve this, the architecture transitioned to **WebRTC** for peer-to-peer communication. By utilizing **SFUs (Selective Forwarding Units)**, the platform manages to broadcast one-to-many streams while keeping latency under 500ms. We combined this with a **Socket.io** signaling layer to handle the initial handshakes and state synchronization across the cluster, ensuring that data packets (like chat or recipe triggers) arrive in sync with the video frames.
+
+## Technical Implementation
+
+Below is an example of a React hook used to manage the signaling layer via Socket.io, ensuring that real-time interaction events are handled efficiently within the UI.
+
+```tsx
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
+
+const SOCKET_URL = process.env.NEXT_PUBLIC_WS_URL || "http://localhost:4000";
+
+export const useLiveInteraction = (streamId: string) => {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [activeInteractions, setActiveInteractions] = useState<any[]>([]);
+
+  useEffect(() => {
+    const newSocket = io(SOCKET_URL, {
+      query: { streamId },
+      transports: ["websocket"],
+    });
+
+    setSocket(newSocket);
+
+    // Listener for real-time recipe triggers from the chef
+    newSocket.on("recipe_shared", (recipeData) => {
+      setActiveInteractions((prev) => [...prev, recipeData]);
+    });
+
+    // Cleanup connection on unmount
+    return () => {
+      newSocket.close();
+    };
+  }, [streamId]);
+
+  const sendReaction = (type: "heart" | "fire") => {
+    socket?.emit("send_reaction", { type, streamId });
+  };
+
+  return { activeInteractions, sendReaction };
+};
+```

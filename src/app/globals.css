@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -121,28 +122,38 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
-  button:not(:disabled), [role="button"]:not(:disabled) {
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
   html {
     @apply font-sans;
   }
 }
 
 @theme inline {
-  --background-image-gradient-radial: radial-gradient(
-          50% 50% at 50% 50%,
-          var(--tw-gradient-stops)
-  );
+  --background-image-gradient-radial: radial-gradient(50% 50% at 50% 50%,
+      var(--tw-gradient-stops));
 }
 
 @keyframes fade-in {
-  0% { opacity: 0; }
-  75% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes fade-left {
@@ -150,11 +161,15 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   30% {
     transform: translateX(0%);
     opacity: 1;
   }
-  100% { opacity: 0; }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes fade-right {
@@ -162,11 +177,15 @@
     transform: translateX(-100%);
     opacity: 0;
   }
+
   30% {
     transform: translateX(0%);
     opacity: 1;
   }
-  100% { opacity: 0; }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes title {
@@ -175,11 +194,16 @@
     letter-spacing: 0.25em;
     opacity: 0;
   }
+
   25% {
     line-height: 0%;
     opacity: 0;
   }
-  80% { opacity: 1; }
+
+  80% {
+    opacity: 1;
+  }
+
   100% {
     line-height: 100%;
     opacity: 1;

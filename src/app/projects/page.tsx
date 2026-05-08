@@ -6,8 +6,6 @@ import { Navigation } from "@/components/navigation";
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-    // 1. Fetch views from your self-hosted Redis
-    // Standard Redis uses .mget(). Upstash uses .mget(). Logic is identical.
     const viewKeys = allProjects.map((p) => `pageviews:projects:${p.slug}`);
     const viewCounts = viewKeys.length > 0 ? await redis.mget(...viewKeys) : [];
 
@@ -16,8 +14,6 @@ export default async function ProjectsPage() {
         return acc;
     }, {} as Record<string, number>);
 
-    // 2. Sort projects (Featured first, then by date)
-    // Here we manually pick featured, or you can sort by view count
     const sorted = allProjects
         .filter((p) => p.published)
         .sort((a, b) => {
@@ -26,8 +22,9 @@ export default async function ProjectsPage() {
         });
 
     const featured = sorted.find((p) => p.slug === "polaris-dev") || sorted[0];
-    const top2 = sorted.find((p) => p.slug === "shoteat") || sorted[1];
-    const others = sorted.filter((p) => p.slug !== featured?.slug && p.slug !== top2?.slug);
+    const remainingAfterFeatured = sorted.filter((p) => p.slug !== featured?.slug);
+    const top2 = remainingAfterFeatured.find((p) => p.slug === "shoteat") || remainingAfterFeatured[0];
+    const others = remainingAfterFeatured.filter((p) => p.slug !== top2?.slug);
 
     return (
         <main className="min-h-screen bg-[#121212] selection:bg-emerald-500/30">
@@ -35,9 +32,12 @@ export default async function ProjectsPage() {
 
             <div className="px-6 pt-20 mx-auto space-y-8 max-w-7xl lg:px-8 md:space-y-16 md:pt-24 lg:pt-32">
                 <div className="max-w-2xl mx-auto lg:mx-0">
-                    <h1 className="font-mono text-4xl font-bold text-zinc-100 tracking-tighter">
-                        ./projects<span className="text-emerald-500 animate-pulse">_</span>
-                    </h1>
+                    <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">
+                        Projects
+                    </h2>
+                    <p className="mt-4 text-zinc-400">
+                        Some of the projects are from work and some are on my own time.
+                    </p>
                 </div>
 
                 <div className="w-full h-px bg-zinc-800" />

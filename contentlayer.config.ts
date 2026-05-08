@@ -108,5 +108,9 @@ export default makeSource({
                 },
             ],
         ],
+        mdxOptions(options) {
+            options.jsxRuntime = "classic";
+            return options;
+        },
     },
 });

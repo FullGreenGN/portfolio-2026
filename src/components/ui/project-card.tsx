@@ -10,8 +10,8 @@ import { useRouter } from "next/navigation";
 interface ProjectCardProps {
     title: string;
     description: string;
-    tags: string[];
-    image: string;
+    tags?: string[];
+    image?: string;
     slug: string; // Added slug
     links?: {
         demo?: string;
