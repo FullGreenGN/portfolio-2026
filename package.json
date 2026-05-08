@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "contentlayer build && next build",
+    "build": "npm run build-contentlayer && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build-contentlayer": "npx contentlayer build"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
