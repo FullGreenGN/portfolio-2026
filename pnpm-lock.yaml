@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  mdast-util-gfm-table@2.0.0:
-    hash: 3a7fb56aa11a07b61bb46f36076f0787617f0f82fe78119123bc1ec07a8f8c02
-    path: patches/mdast-util-gfm-table@2.0.0.patch
-
 importers:
 
   .:
@@ -9272,7 +9267,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-gfm-table@2.0.0(patch_hash=3a7fb56aa11a07b61bb46f36076f0787617f0f82fe78119123bc1ec07a8f8c02):
+  mdast-util-gfm-table@2.0.0:
     dependencies:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
@@ -9297,7 +9292,7 @@ snapshots:
       mdast-util-gfm-autolink-literal: 2.0.1
       mdast-util-gfm-footnote: 2.1.0
       mdast-util-gfm-strikethrough: 2.0.0
-      mdast-util-gfm-table: 2.0.0(patch_hash=3a7fb56aa11a07b61bb46f36076f0787617f0f82fe78119123bc1ec07a8f8c02)
+      mdast-util-gfm-table: 2.0.0
       mdast-util-gfm-task-list-item: 2.0.0
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
