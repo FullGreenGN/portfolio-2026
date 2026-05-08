@@ -19,7 +19,7 @@ const socials = [
     },
     {
         icon: <IconBrandDiscord size={20} />,
-        href: "discord:///users/216936486875037699"
+        href: "discord:///users/216936486875037699",
         label: "Discord",
         handle: "fullgreengn",
     },
