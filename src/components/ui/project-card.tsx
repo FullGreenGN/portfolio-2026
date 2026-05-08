@@ -4,13 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { IconBrandGithub, IconExternalLink } from "@tabler/icons-react"
+import { IconBrandGithub, IconExternalLink } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 interface ProjectCardProps {
-    title?: string;
-    description?: string;
-    tags?: string[];
-    image?: string;
+    title: string;
+    description: string;
+    tags: string[];
+    image: string;
+    slug: string; // Added slug
     links?: {
         demo?: string;
         github?: string;
@@ -18,84 +20,76 @@ interface ProjectCardProps {
     className?: string;
 }
 
-const defaultProject = {
-    title: "E-Commerce Platform",
-    description:
-        "Full-stack online store with payment integration and inventory management",
-    tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
-    image:
-        "https://images.unsplash.com/photo-1661956602116-aa6865609028?w=800&q=80",
-    links: { demo: "#", github: "#" },
-};
-
 export function ProjectCard({
-                                title = defaultProject.title,
-                                description = defaultProject.description,
-                                tags = defaultProject.tags,
-                                image = defaultProject.image,
-                                links = defaultProject.links,
+                                title,
+                                description,
+                                tags,
+                                image,
+                                slug,
+                                links,
                                 className,
                             }: ProjectCardProps) {
+    const router = useRouter();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className={cn("w-full max-w-[400px]", className)}
+            className={cn("w-full cursor-pointer group", className)}
+            onClick={() => router.push(`/projects/${slug}`)}
         >
-            <Card className="group relative h-full overflow-hidden rounded-2xl border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
+            <Card className="relative h-full overflow-hidden rounded-2xl border-white/5 bg-[#1a1a1a]/50 backdrop-blur-md transition-all duration-500 hover:border-emerald-500/30 hover:bg-[#1a1a1a]">
                 <div className="relative aspect-video overflow-hidden">
-                    <motion.img
+                    <img
                         src={image}
                         alt={title}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    {/* Gradient Overlay optimized for #121212 */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-60" />
 
-                    <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 transition-all duration-300 group-hover:opacity-100">
-                        {links?.demo && (
-                            <motion.a
-                                href={links.demo}
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/25 backdrop-blur-md"
-                                title="View Demo"
-                            >
-                                <IconExternalLink className="h-5 w-5" />
-                            </motion.a>
-                        )}
+                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         {links?.github && (
-                            <motion.a
+                            <a
                                 href={links.github}
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground shadow-lg backdrop-blur-md"
-                                title="View Code"
+                                onClick={(e) => e.stopPropagation()}
+                                className="p-2 rounded-full bg-black/50 text-white hover:bg-emerald-500 transition-colors"
                             >
-                                <IconBrandGithub className="h-5 w-5" />
-                            </motion.a>
+                                <IconBrandGithub size={18} />
+                            </a>
+                        )}
+                        {links?.demo && (
+                            <a
+                                href={links.demo}
+                                onClick={(e) => e.stopPropagation()}
+                                className="p-2 rounded-full bg-black/50 text-white hover:bg-emerald-500 transition-colors"
+                            >
+                                <IconExternalLink size={18} />
+                            </a>
                         )}
                     </div>
                 </div>
 
-                <div className="p-5">
-                    <h3 className="mb-2 text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
-                        {title}
-                    </h3>
-                    <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
-                        {description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                        {tags?.map((tag, index) => (
+                <div className="p-6 font-mono">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                        {tags?.map((tag) => (
                             <Badge
-                                key={index}
-                                variant="secondary"
-                                className="bg-secondary/50 px-2 py-0.5 text-xs font-normal hover:bg-secondary"
+                                key={tag}
+                                variant="outline"
+                                className="border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] uppercase tracking-widest"
                             >
                                 {tag}
                             </Badge>
                         ))}
                     </div>
+                    <h3 className="mb-2 text-xl font-bold tracking-tighter text-zinc-100 group-hover:text-emerald-400 transition-colors">
+                        {title}
+                    </h3>
+                    <p className="text-sm text-zinc-400 line-clamp-2 leading-relaxed">
+                        {description}
+                    </p>
                 </div>
             </Card>
         </motion.div>

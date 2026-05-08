@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  output: "standalone",
+  experimental: {
+    mdxRs: true,
+  },
+  reactCompiler: true
 };
 
 export default nextConfig;
